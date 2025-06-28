@@ -1,0 +1,3 @@
+platformdirs
+tzlocal
+psycopg2-binary

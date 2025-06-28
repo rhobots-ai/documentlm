@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary color shades in RGB format */
+  --color-primary-50: 238 242 255;
+  --color-primary-100: 224 231 255;
+  --color-primary-200: 199 210 254;
+  --color-primary-300: 165 181 252;
+  --color-primary-400: 128 141 249;
+  --color-primary-500: 98 102 242;
+  --color-primary-600: 79 71 230;
+  --color-primary-700: 65 55 203;
+  --color-primary-800: 54 47 164;
+  --color-primary-900: 48 46 129;
+  --color-primary-950: 30 27 75;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700;
+  }
+
+  .input {
+    @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+  }
+
+  .selection-popup {
+    @apply fixed z-50 transform -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-200;
+  }
+
+  .selection-popup.active {
+    @apply opacity-100 pointer-events-auto;
+  }
+
+  .selection-popup-btn {
+    @apply flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-lg border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-medium transition-all;
+  }
+
+  .selection-popup {
+    @apply fixed z-50 transform -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-200;
+  }
+
+  .selection-popup.active {
+    @apply opacity-100 pointer-events-auto;
+  }
+
+  .selection-popup-btn {
+    @apply flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white shadow-lg border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-medium transition-all;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
+
+  /* TipTap Editor Styles */
+  .ProseMirror p {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .ProseMirror ul {
+    @apply list-disc pl-6;
+  }
+
+  .ProseMirror ol {
+    @apply list-decimal pl-6;
+  }
+
+  .ProseMirror strong {
+    @apply font-bold;
+  }
+
+  .ProseMirror em {
+    @apply italic;
+  }
+
+  /* Message Styles */
+
+  mark {
+    @apply bg-transparent text-gray-600 dark:text-gray-400
+  }
+
+  h3 {
+    line-height: 2em;
+    margin-top: 1em;
+  }
+
+  .prose pre {
+    @apply bg-gray-50 dark:bg-gray-800 p-3 rounded-lg;
+  }
+
+  .prose code {
+    @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/50 px-1.5 py-0.5 rounded-md;
+  }
+
+  .prose ol {
+    list-style: auto;
+    margin: 20px auto;
+    padding-inline-start: 40px;
+  }
+
+  .prose ul {
+    list-style: initial;
+    margin: 20px auto;
+    padding-inline-start: 40px;
+  }
+
+  .prose ul li, .prose ol li {
+    margin: 8px 0;
+  }
+
+  .prose code::before,
+  .prose code::after {
+    content: none;
+  }
+
+  .prose a {
+    @apply text-primary-600 dark:text-primary-400 no-underline;
+  }
+
+  .prose a:hover {
+    @apply underline;
+  }
+
+  .prose .mark {
+    @apply mx-1 px-2 py-1.5 rounded-full text-xs font-medium bg-primary-200 dark:bg-primary-900/50 text-primary-700 dark:text-primary-200 inline-flex items-center gap-1 no-underline cursor-pointer
+  }
+
+  .prose .mark:hover {
+    @apply no-underline;
+  }
+
+  .prose em {
+    @apply text-gray-700 dark:text-gray-300;
+  }
+}

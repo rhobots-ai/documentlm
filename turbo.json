@@ -1,0 +1,83 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [".env"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^test"]
+    },
+    "web:dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "web:build": {
+      "dependsOn": ["^build"],
+      "outputs": ["web/.output/**"]
+    },
+    "auth:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "auth:build": {
+      "dependsOn": ["^build"],
+      "outputs": ["auth/dist/**"]
+    },
+    "rag:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "rag:build": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "core:migrate": {
+      "cache": false,
+      "dependsOn": [],
+      "inputs": [
+        "core/manage.py",
+        "core/core/settings/**",
+        "core/**/migrations/**",
+        "core/**/models.py"
+      ]
+    },
+    "core:makemigrations": {
+      "cache": false,
+      "dependsOn": [],
+      "inputs": [
+        "core/manage.py",
+        "core/core/settings/**",
+        "core/**/models.py"
+      ]
+    },
+    "core:dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["core:migrate"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "core:dev",
+        "web:dev",
+        "auth:dev",
+        "rag:dev"
+      ]
+    },
+    "build:all": {
+      "dependsOn": [
+        "web:build",
+        "auth:build",
+        "rag:build"
+      ],
+      "outputs": []
+    }
+  }
+}

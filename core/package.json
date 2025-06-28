@@ -1,0 +1,16 @@
+{
+  "name": "core",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "core:dev": "python manage.py runserver 0.0.0.0:8000",
+    "core:migrate": "python manage.py migrate",
+    "core:makemigrations": "python manage.py makemigrations",
+    "core:test": "pytest",
+    "core:lint": "flake8 ."
+  },
+  "devDependencies": {},
+  "engines": {
+    "python": ">=3.12"
+  }
+}

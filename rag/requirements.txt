@@ -1,0 +1,22 @@
+# Framework
+flask
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database and Models
+sqlmodel
+
+# Utils
+#werkzeug
+#python-decouple
+theflow
+
+boto3
+psycopg2-binary
+pylance
+gunicorn
+fastapi
+black
+# Original requirements
+#django
