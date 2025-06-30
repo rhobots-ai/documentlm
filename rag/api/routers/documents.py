@@ -18,7 +18,7 @@ async def document_delete_view(
     request_data = await request.json()
     file_ids = request_data.get('file_ids', False)
 
-    document_service = DocumentService(request.app.state.deepcite)
+    document_service = DocumentService(request.app.state.documentlm)
     await document_service.delete_file(file_ids)
     return JSONResponse(content={'message': 'File deleted.'}, status_code=200)
 
@@ -36,7 +36,7 @@ async def document_upload_view(
         Upload result or streaming response
     """
     try:
-        document_service = DocumentService(request.app.state.deepcite)
+        document_service = DocumentService(request.app.state.documentlm)
 
         request_data = await request.json()
         stream_response = request_data.get('stream', False)

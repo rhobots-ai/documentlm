@@ -80,7 +80,7 @@
           >
             <Info class="h-4 w-4"/>
             <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-400">
-              deepcite-text-v1
+              rhobots-text-v1
             </span>
           </NuxtLink>
           <a

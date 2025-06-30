@@ -24,7 +24,7 @@ class BaseLLMTable(Base):
     default = Column(Boolean, default=False)
 
 
-class DeepCiteBaseLLMTable(Base):
+class DocumentLMBaseLLMTable(Base):
     """Base table to store language model"""
 
     __abstract__ = True
@@ -41,10 +41,10 @@ class DeepCiteBaseLLMTable(Base):
     )
 
 
-_base_llm: Type[DeepCiteBaseLLMTable] = (
+_base_llm: Type[DocumentLMBaseLLMTable] = (
     import_dotted_string(flowsettings.KH_TABLE_LLM, safe=False)
     if hasattr(flowsettings, "KH_TABLE_LLM")
-    else DeepCiteBaseLLMTable
+    else DocumentLMBaseLLMTable
 )
 
 

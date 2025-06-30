@@ -254,7 +254,7 @@ const handleAddFunds = async () => {
         key: payment.key,
         amount: payment.amount,
         currency: payment.currency,
-        name: 'Add Funds to DeepCite',
+        name: 'Add Funds to DocumentLM',
         description: `Adding $${amount.value} to your account`,
         prefill: {
           name: userStore.fullName,

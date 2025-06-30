@@ -753,11 +753,17 @@ class IndexDocumentPipeline(BaseFileIndexIndexing):
 
         # Get the S3 key from the file object
         s3_key = file.file
-        bucket_name = flowsettings.KH_S3_BUCKET_NAME
+        bucket_name = flowsettings.AWS_STORAGE_BUCKET_NAME
         region = 'ap-south-1'
 
         # Download the file from S3
-        s3_client = boto3.client('s3', region_name=region, aws_access_key_id=flowsettings.KH_S3_ACCESS_KEY, aws_secret_access_key=flowsettings.KH_S3_SECRET_KEY)
+        s3_client = boto3.client(
+            's3',
+            endpoint_url=flowsettings.AWS_S3_ENDPOINT_URL,
+            region_name=region,
+            aws_access_key_id=flowsettings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=flowsettings.AWS_SECRET_ACCESS_KEY
+        )
         s3_client.download_file(bucket_name, s3_key, temp_path)
 
         return temp_path

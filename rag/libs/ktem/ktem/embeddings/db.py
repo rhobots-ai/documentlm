@@ -24,7 +24,7 @@ class BaseEmbeddingTable(Base):
     default = Column(Boolean, default=False)
 
 
-class DeepCiteBaseEmbeddingTable(Base):
+class DocumentLMBaseEmbeddingTable(Base):
     """Base table to store language model"""
 
     __abstract__ = True
@@ -41,10 +41,10 @@ class DeepCiteBaseEmbeddingTable(Base):
     )
 
 
-_base_llm: Type[DeepCiteBaseEmbeddingTable] = (
+_base_llm: Type[DocumentLMBaseEmbeddingTable] = (
     import_dotted_string(flowsettings.KH_EMBEDDING_LLM, safe=False)
     if hasattr(flowsettings, "KH_EMBEDDING_LLM")
-    else DeepCiteBaseEmbeddingTable
+    else DocumentLMBaseEmbeddingTable
 )
 
 

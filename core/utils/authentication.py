@@ -12,7 +12,7 @@ from accounts.models import Organization
 from utils.auth_backend import verify_better_auth_token
 
 
-class DeepCiteTokenAuthentication(TokenAuthentication):
+class RhobotsTokenAuthentication(TokenAuthentication):
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
         prefix = self.authenticate_header(request).encode()
@@ -52,7 +52,7 @@ class JWTAuthenticationMiddleware(BaseAuthentication):
                 subdomain = None
                 if len(host_parts) >= 2:
                     subdomain = host_parts[0]
-                if subdomain is not None and subdomain not in ['deepcite']:
+                if subdomain is not None and subdomain not in ['documentlm']:
                     request.organization = Organization.objects.filter(slug=subdomain).first()
 
             auth = get_authorization_header(request).split()

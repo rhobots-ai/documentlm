@@ -41,7 +41,7 @@ export async function callWebhook(
   payload: WebhookPayload
 ): Promise<WebhookResponse> {
   try {
-    const secret = config.WEBHOOK_SECRET
+    const secret = config.WEBHOOK_SECRET_KEY
     const signature = generateSignature(payload, secret)
     const response: AxiosResponse<WebhookResponse> = await axios.post(
       config.WEBHOOK_EP,

@@ -7,10 +7,10 @@
           Talk to Your Data. All of It.
         </h1>
         <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-4">
-          From scattered PDFs to hours of videos, DeepCite transforms chaos into clarity.
+          From scattered PDFs to hours of videos, DocumentLM transforms chaos into clarity.
         </p>
         <p class="text-lg text-gray-500 dark:text-gray-400">
-          Meet our team, see a live demo of DeepCite Enterprise, and get your questions answered.
+          Meet our team, see a live demo of DocumentLM Enterprise, and get your questions answered.
         </p>
       </div>
 
@@ -25,7 +25,7 @@
             <div class="relative p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                 <Server class="h-5 w-5 text-blue-500" />
-                Overview of DeepCite Enterprise Platform
+                Overview of DocumentLM Enterprise Platform
               </h3>
               <ul class="space-y-2 text-gray-600 dark:text-gray-300">
                 <li class="flex items-start gap-2">
@@ -63,7 +63,7 @@
                 </li>
                 <li class="flex items-start gap-2">
                   <CheckCircle2 class="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  How DeepCite ensures zero data leakage and end-to-end privacy
+                  How DocumentLM ensures zero data leakage and end-to-end privacy
                 </li>
               </ul>
             </div>
@@ -165,7 +165,7 @@
 
               <!-- Use Cases -->
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">What are you interested in using DeepCite for? *</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">What are you interested in using DocumentLM for? *</label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   <button
                       v-for="useCase in useCases"

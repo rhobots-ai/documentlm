@@ -1,5 +1,5 @@
 """
-WSGI config for deepcite project.
+WSGI config for DocumentLM project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

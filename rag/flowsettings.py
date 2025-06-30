@@ -36,6 +36,16 @@ KH_APP_DATA_DIR = this_dir / "ktem_app_data"
 KH_APP_DATA_EXISTS = KH_APP_DATA_DIR.exists()
 KH_APP_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+# Temp data directory
+KH_TEMP_DATA_DIR = KH_APP_DATA_DIR / "tmp"
+KH_TEMP_DATA_DIR.mkdir(parents=True, exist_ok=True)
+os.environ["TMPDIR"] = str(KH_TEMP_DATA_DIR)
+
+# NLTK data directory
+KH_NLTK_DATA_DIR = KH_APP_DATA_DIR / "nltk_data"
+KH_NLTK_DATA_DIR.mkdir(parents=True, exist_ok=True)
+os.environ["NLTK_DATA"] = str(KH_NLTK_DATA_DIR)
+
 # User data directory
 KH_USER_DATA_DIR = KH_APP_DATA_DIR / "user_data"
 KH_USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -352,7 +362,7 @@ KH_INDEX_TYPES = [
 GRAPHRAG_INDICES = [
     {
         "name": graph_type.split(".")[-1].replace("Index", "")
-        + " Collection",  # get last name
+                + " Collection",  # get last name
         "config": {
             "supported_file_types": (
                 ".png, .jpeg, .jpg, .tiff, .tif, .pdf, .xls, .xlsx, .doc, .docx, "
@@ -381,16 +391,17 @@ KH_INDICES = [
 ]
 
 KH_USE_S3_STORAGE = config("KH_USE_S3_STORAGE", default=True, cast=bool)
-KH_S3_BUCKET_NAME = config("KH_S3_BUCKET_NAME", default="")
-KH_S3_REGION = config("KH_S3_REGION", default="ap-south-1")
-KH_S3_ACCESS_KEY = config("KH_S3_ACCESS_KEY", default="")
-KH_S3_SECRET_KEY = config("KH_S3_SECRET_KEY", default="")
-KH_S3_PREFIX = config("KH_S3_PREFIX", default="deepcite/")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="")
+AWS_REGION = config("AWS_REGION", default="ap-south-1")
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
+AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL", default="")
+KH_S3_PREFIX = config("KH_S3_PREFIX", default="documentlm/")
 
-KH_APP_NAME = "Deepcite"
+KH_APP_NAME = "DocumentLM"
 UNSTRUCTURED_API_KEY="8JVMybdUeZ2RqCAEhBR283dD8XB7I4"
 UNSTRUCTURED_BASE_URL = 'https://api.unstructuredapp.io'
 
-KH_TABLE_USER = "ktem.db.deepcite_models.BaseUser"
-KH_TABLE_SETTINGS = "ktem.db.deepcite_models.BaseSetting"
-KH_TABLE_ISSUE_REPORT = "ktem.db.deepcite_models.BaseIssueReport"
+KH_TABLE_USER = "ktem.db.documentlm_models.BaseUser"
+KH_TABLE_SETTINGS = "ktem.db.documentlm_models.BaseSetting"
+KH_TABLE_ISSUE_REPORT = "ktem.db.documentlm_models.BaseIssueReport"

@@ -1,5 +1,5 @@
 """
-ASGI config for deepcite project.
+ASGI config for DocumentLM project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

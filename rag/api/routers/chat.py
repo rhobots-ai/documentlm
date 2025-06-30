@@ -31,7 +31,7 @@ async def chat_view(request: Request):
         if not request_data:
             return JSONResponse(content={"error": "Invalid request data"}, status_code=400)
 
-        chat_service = ChatService(request.app.state.deepcite)
+        chat_service = ChatService(request.app.state.documentlm)
 
         # --- Start: Conversation Name Generation ---
         is_first_message = not request_data.get('chat_history', [])

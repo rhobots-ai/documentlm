@@ -59,7 +59,7 @@ export const useOrganizationStore = defineStore('organization', () => {
 
       // check if it is org (subdomain) url and user is a member of the current org
       const subDomain = getSubdomain()
-      if (false && whiteLabeledStatus.value == 'enabled' && profile.value && subDomain && subDomain !== 'deepcite') {
+      if (false && whiteLabeledStatus.value == 'enabled' && profile.value && subDomain && subDomain !== 'documentlm') {
         const isCurrentUserOrganization = profile.value.organizations.filter(o => o.slug === subDomain).length > 0
         if (!isCurrentUserOrganization) {
           whiteLabeledStatus.value = 'not_member'

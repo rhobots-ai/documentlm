@@ -109,7 +109,7 @@ export const auth = betterAuth({
           let imageUrl = null
           if (user.image) {
             const uniqueId: string = uuidv4();
-            imageUrl = await uploadImageToS3(user.image, config.AWS_S3_BUCKET, `profile-pictures/${uniqueId}.jpg`)
+            imageUrl = await uploadImageToS3(user.image, config.AWS_STORAGE_BUCKET_NAME, `profile-pictures/${uniqueId}.jpg`)
           }
           return {data: {...user, image: imageUrl}};
         },
@@ -147,7 +147,7 @@ export const auth = betterAuth({
     }
   },
   advanced: {
-    cookiePrefix: "deepcite",
+    cookiePrefix: "rhobots",
     crossSubDomainCookies: {
       enabled: true,
       domain: `.${config.BASE_DOMAIN}`

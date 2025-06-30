@@ -4,7 +4,7 @@
       <div class="w-full max-w-md">
         <div class="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-6">
           <div v-if="!isWhiteLabeled" class="text-center mb-8">
-            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Welcome to DeepCite</h1>
+            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Welcome to DocumentLM</h1>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
               From Text to Video—One AI for All Your Research. It helps you analyze unstructured data, extract insights, and collaborate in one powerful
               workspace.

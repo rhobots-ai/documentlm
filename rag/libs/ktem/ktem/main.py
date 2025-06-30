@@ -50,7 +50,7 @@ class App(BaseApp):
                     elem_id="how-it-works-tab",
                     id="how-it-works-tab",
             ) as self._tabs["how-it-works-tab"]:
-                gr.HTML('<div style="position: relative; box-sizing: content-box; max-height: 80vh; max-height: 80svh; width: 100%; aspect-ratio: 1.6061507936507937; padding: 40px 0 40px 0;"><iframe src="https://app.supademo.com/embed/cm8ssexsz0hw1y6twz7cbuqyb?embed_v=2" loading="lazy" title="Deepcite Demo" allow="clipboard-write" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>')
+                gr.HTML('<div style="position: relative; box-sizing: content-box; max-height: 80vh; max-height: 80svh; width: 100%; aspect-ratio: 1.6061507936507937; padding: 40px 0 40px 0;"><iframe src="https://app.supademo.com/embed/cm8ssexsz0hw1y6twz7cbuqyb?embed_v=2" loading="lazy" title="DocumentLM Demo" allow="clipboard-write" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>')
 
             if self.f_user_management:
                 from ktem.pages.login import LoginPage

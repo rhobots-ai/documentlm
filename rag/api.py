@@ -1,5 +1,5 @@
 """
-Main API entry point for the deepcite FastAPI application.
+Main API entry point for the DocumentLM FastAPI application.
 
 This file is a wrapper around the modular API implementation in the api/ directory.
 It provides compatibility with existing deployment scripts and server configurations.

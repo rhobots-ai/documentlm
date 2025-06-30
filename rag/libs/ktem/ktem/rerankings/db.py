@@ -24,7 +24,7 @@ class BaseRerankingTable(Base):
     default = Column(Boolean, default=False)
 
 
-class DeepCiteBaseRerankingTable(Base):
+class DocumentLMBaseRerankingTable(Base):
     """Base table to store language model"""
 
     __abstract__ = True
@@ -41,10 +41,10 @@ class DeepCiteBaseRerankingTable(Base):
     )
 
 
-__base_reranking: Type[DeepCiteBaseRerankingTable] = (
+__base_reranking: Type[DocumentLMBaseRerankingTable] = (
     import_dotted_string(flowsettings.KH_TABLE_RERANKING, safe=False)
     if hasattr(flowsettings, "KH_TABLE_RERANKING")
-    else DeepCiteBaseRerankingTable
+    else DocumentLMBaseRerankingTable
 )
 
 

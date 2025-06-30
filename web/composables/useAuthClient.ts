@@ -8,7 +8,7 @@ export function useAuthClient() {
   const {signIn, signUp, signOut, getSession, token, useListOrganizations, useActiveOrganization, organization} = createAuthClient({
     baseURL: config.public.authBaseUrl,
     advanced: {
-      cookiePrefix: "deepcite"
+      cookiePrefix: "documentlm"
     },
     plugins: [
       anonymous(),

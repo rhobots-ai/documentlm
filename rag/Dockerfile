@@ -27,10 +27,7 @@ RUN apt-get update -qqy && \
         gcc \
         g++ \
         poppler-utils \
-        libpoppler-dev \
-        libmagic-dev
-
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 tesseract-ocr --fix-missing
+        libpoppler-dev
 
 # Clean up
 RUN apt-get autoremove \
@@ -44,10 +41,10 @@ FROM base AS builder
 # Install Python deps (supports pyproject or requirements.txt)
 WORKDIR /app
 
-COPY rag/scripts/download_pdfjs.sh /app/scripts/download_pdfjs.sh
-RUN chmod +x /app/scripts/download_pdfjs.sh
-ENV PDFJS_PREBUILT_DIR="/app/libs/ktem/ktem/assets/prebuilt/pdfjs-dist"
-RUN bash scripts/download_pdfjs.sh $PDFJS_PREBUILT_DIR
+#COPY rag/scripts/download_pdfjs.sh /app/scripts/download_pdfjs.sh
+#RUN chmod +x /app/scripts/download_pdfjs.sh
+#ENV PDFJS_PREBUILT_DIR="/app/libs/ktem/ktem/assets/prebuilt/pdfjs-dist"
+#RUN bash scripts/download_pdfjs.sh $PDFJS_PREBUILT_DIR
 
 COPY rag .
 

@@ -31,7 +31,7 @@
             <!-- Document Privacy -->
             <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">2. Document Privacy</h2>
             <p class="text-gray-600 dark:text-gray-300">
-              Your documents are processed using our deepcite-text-v1 model with the following guarantees:
+              Your documents are processed using our rhobots-text-v1 model with the following guarantees:
             </p>
             <ul class="text-gray-600 dark:text-gray-300">
               <li>End-to-end encryption during transmission</li>
@@ -102,7 +102,7 @@
             </p>
             <div class="flex items-center gap-2 text-primary-600 dark:text-primary-400">
               <Mail class="h-5 w-5" />
-              <a href="mailto:tech@deepcite.in" class="hover:underline">tech@deepcite.in</a>
+              <a href="mailto:tech@rhobots.ai" class="hover:underline">tech@rhobots.ai</a>
             </div>
 
             <!-- Updates -->

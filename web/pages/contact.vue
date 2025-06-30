@@ -7,7 +7,7 @@
           Get in Touch
         </h1>
         <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          Have questions about DeepCite? We're here to help you get the most out of your document analysis.
+          Have questions about DocumentLM? We're here to help you get the most out of your document analysis.
         </p>
       </div>
 
@@ -66,8 +66,8 @@
                   </div>
                   <div>
                     <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Email</h3>
-                    <a href="mailto:tech@deepcite.in" class="text-primary-600 dark:text-primary-400 hover:underline">
-                      tech@deepcite.in
+                    <a href="mailto:tech@rhobots.ai" class="text-primary-600 dark:text-primary-400 hover:underline">
+                      tech@rhobots.ai
                     </a>
                   </div>
                 </div>

@@ -35,7 +35,7 @@ const checkIfWhiteLabeled = async () => {
     const subDomain = getSubdomain()
 
     // Skip for localhost and common development domains
-    if (!subDomain || subDomain === 'deepcite') {
+    if (!subDomain || subDomain === 'documentlm') {
       return
     }
 
@@ -149,10 +149,10 @@ useSeoMeta({
       : 'Ask deep questions across data. Get citations. Collaborate securely. It is your AI assistant for serious research.'),
   ogImage: computed(() => isWhiteLabeled.value && whiteLabeledOrganization.value?.metadata
       ? whiteLabeledOrganization.value.metadata.logo_light
-      : 'https://deepcite.rhobots.ai/images/og-image.png'),
+      : 'https://documentlm.rhobots.ai/images/og-image.png'),
   ogUrl: computed(() => isWhiteLabeled.value
       ? `https://${window.location.hostname}`
-      : 'https://deepcite.rhobots.ai/'),
+      : 'https://documentlm.rhobots.ai/'),
   ogType: 'website',
   twitterCard: 'summary_large_image',
   twitterTitle: computed(() => isWhiteLabeled.value
@@ -163,7 +163,7 @@ useSeoMeta({
       : 'Ask complex questions, get grounded answers, and cite confidently — all within your domain.'),
   twitterImage: computed(() => isWhiteLabeled.value && whiteLabeledOrganization.value?.metadata
       ? whiteLabeledOrganization.value.metadata.logo_light
-      : 'https://deepcite.rhobots.ai/images/og-image.png'),
+      : 'https://documentlm.rhobots.ai/images/og-image.png'),
   robots: 'index, follow',
 });
 </script>

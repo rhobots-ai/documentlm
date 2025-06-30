@@ -7,15 +7,15 @@ from jwt.utils import base64url_decode
 from config import settings
 
 # Better Auth configuration
-DEEPCITE_AUTH_EP = settings.DEEPCITE_AUTH_EP
-DEEPCITE_AUTH_ISSUER = 'http://localhost:10000'
-DEEPCITE_AUTH_JWKS_URL = f"{DEEPCITE_AUTH_EP}/api/auth/jwks"
-DEEPCITE_AUTH_SIGNUP_URL = f"{DEEPCITE_AUTH_EP}/api/auth/sign-up/email"
-DEEPCITE_AUTH_SIGNIN_URL = f"{DEEPCITE_AUTH_EP}/api/auth/sign-in/email"
-DEEPCITE_AUTH_AUDIENCE = 'http://localhost:10000'
+DOCUMENTLM_AUTH_EP = settings.DOCUMENTLM_AUTH_EP
+DOCUMENTLM_AUTH_ISSUER = 'http://localhost:10000'
+DOCUMENTLM_AUTH_JWKS_URL = f"{DOCUMENTLM_AUTH_EP}/api/auth/jwks"
+DOCUMENTLM_AUTH_SIGNUP_URL = f"{DOCUMENTLM_AUTH_EP}/api/auth/sign-up/email"
+DOCUMENTLM_AUTH_SIGNIN_URL = f"{DOCUMENTLM_AUTH_EP}/api/auth/sign-in/email"
+DOCUMENTLM_AUTH_AUDIENCE = 'http://localhost:10000'
 
 def get_jwks():
-    response = requests.get(DEEPCITE_AUTH_JWKS_URL)
+    response = requests.get(DOCUMENTLM_AUTH_JWKS_URL)
     response.raise_for_status()
     return response.json()
 
@@ -44,8 +44,8 @@ def verify_better_auth_token(token):
             token,
             key=signing_key,
             algorithms=["EdDSA"],  # Better Auth uses RS256
-            audience=DEEPCITE_AUTH_AUDIENCE,
-            issuer=DEEPCITE_AUTH_ISSUER,
+            audience=DOCUMENTLM_AUTH_AUDIENCE,
+            issuer=DOCUMENTLM_AUTH_ISSUER,
             options={
                 "require": ["exp", "iat", "aud", "iss"],
                 "verify_signature": True,

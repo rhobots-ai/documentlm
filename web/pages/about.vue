@@ -9,7 +9,7 @@
         <p class="mt-6 text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto relative">
           Powered by
           <span class="relative inline-block">
-            <span class="text-primary-600 dark:text-primary-400 font-semibold">deepcite-text-v1</span>
+            <span class="text-primary-600 dark:text-primary-400 font-semibold">documentlm-text-v1</span>
             <svg class="absolute -bottom-4 left-0 w-full" viewBox="0 0 100 15" preserveAspectRatio="none">
               <path d="M0,5 Q25,3 50,5 T100,5" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-400/50 dark:text-primary-600/50" />
             </svg>
@@ -75,7 +75,7 @@
         <div class="relative p-8 sm:p-12 backdrop-blur-sm">
           <div class="max-w-3xl mx-auto text-center">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-              Meet deepcite-text-v1
+              Meet documentlm-text-v1
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
               Our specialized language model is built from the ground up to excel at document comprehension and analysis. It understands context, maintains accuracy, and provides verifiable insights from your documents.

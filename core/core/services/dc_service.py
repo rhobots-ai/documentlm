@@ -25,7 +25,7 @@ def _build_chat_history(messages: List[Message]) -> List[List[str]]:
 
 class DCService:
     def __init__(self):
-        self._base_url = settings.DEEPCITE_RAG_EP
+        self._base_url = settings.DOCUMENTLM_RAG_EP
 
     def delete_data_source(self, file_ids: list[str]):
         response = requests.post(

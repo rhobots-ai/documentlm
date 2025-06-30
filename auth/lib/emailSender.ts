@@ -22,8 +22,11 @@ interface EmailParams {
 }
 
 export async function sendEmail(params: EmailParams): Promise<string> {
-  const {to, subject, body, isHtml = false} = params;
+  if (!config.AWS_SENDER_EMAIL) {
+    return 'AWS_SENDER_EMAIL not configured'
+  }
 
+  const {to, subject, body, isHtml = false} = params;
   const sendEmailParams = {
     FromEmailAddress: config.AWS_SENDER_EMAIL,
     Destination: {
@@ -60,7 +63,7 @@ export async function sendEmail(params: EmailParams): Promise<string> {
   }
 }
 
-export async function renderEmailTemplate(templateName, variables) {
+export async function renderEmailTemplate(templateName: string, variables: any) {
   const templatePath = path.join('email_templates', `${templateName}.html`);
   let template = await fs.readFile(templatePath, 'utf-8');
 

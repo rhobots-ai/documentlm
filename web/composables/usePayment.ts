@@ -16,7 +16,7 @@ export const usePayment = () => {
       key: order.key,
       amount: order.amount,
       currency: order.currency,
-      name: order.name || "DeepCite",
+      name: order.name || "DocumentLM",
       description: order.description || "Payment",
       order_id: order.id,
       handler: function (response: any) {

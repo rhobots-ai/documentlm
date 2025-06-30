@@ -8,15 +8,16 @@ from theflow.settings import settings as flowsettings
 
 class S3Storage:
     def __init__(self, prefix):
-        self.bucket_name = flowsettings.KH_S3_BUCKET_NAME
-        self.region = flowsettings.KH_S3_REGION
+        self.bucket_name = flowsettings.AWS_STORAGE_BUCKET_NAME
+        self.region = flowsettings.AWS_REGION
         self.prefix = prefix
 
         self.s3_client = boto3.client(
             's3',
+            endpoint_url=flowsettings.AWS_S3_ENDPOINT_URL,
             region_name=self.region,
-            aws_access_key_id=flowsettings.KH_S3_ACCESS_KEY,
-            aws_secret_access_key=flowsettings.KH_S3_SECRET_KEY
+            aws_access_key_id=flowsettings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=flowsettings.AWS_SECRET_ACCESS_KEY
         )
 
     def upload_file(self, file_path, file_hash):

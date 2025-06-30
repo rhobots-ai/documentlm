@@ -24,7 +24,7 @@
         <!-- CTAs -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
           <button class="px-8 py-4 rounded-xl bg-primary-600 text-white text-lg font-medium hover:bg-primary-700 transition-colors shadow-lg hover:shadow-xl hover:shadow-primary-600/20">
-            Try DeepCite Now
+            Try DocumentLM Now
           </button>
           <button class="px-8 py-4 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-lg font-medium border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl">
             Explore Public Spaces
@@ -59,7 +59,7 @@
             <div class="max-w-3xl mx-auto text-center">
               <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-400 text-sm font-medium mb-6">
                 <Cpu class="h-4 w-4"/>
-                Powered by deepcite-text-v1
+                Powered by rhobots-text-v1
               </div>
               <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Purpose-Built for Deep Document Analysis

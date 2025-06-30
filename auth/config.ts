@@ -17,10 +17,10 @@ interface AppConfig {
   AWS_ACCESS_KEY_ID: string;
   AWS_SECRET_ACCESS_KEY: string;
   AWS_REGION: string;
-  AWS_S3_BUCKET: string;
+  AWS_STORAGE_BUCKET_NAME: string;
   AWS_SENDER_EMAIL: string;
 
-  WEBHOOK_SECRET: string;
+  WEBHOOK_SECRET_KEY: string;
   WEBHOOK_EP: string;
 }
 
@@ -42,9 +42,9 @@ const getConfig = (): AppConfig => {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
     AWS_REGION: process.env.AWS_REGION || '',
-    AWS_S3_BUCKET: process.env.AWS_S3_BUCKET || '',
+    AWS_STORAGE_BUCKET_NAME: process.env.AWS_STORAGE_BUCKET_NAME || '',
     AWS_SENDER_EMAIL: process.env.AWS_SENDER_EMAIL || '',
-    WEBHOOK_SECRET: process.env.WEBHOOK_SECRET || '',
+    WEBHOOK_SECRET_KEY: process.env.WEBHOOK_SECRET_KEY || '',
     WEBHOOK_EP: process.env.WEBHOOK_EP || '',
   };
 };

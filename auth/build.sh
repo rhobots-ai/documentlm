@@ -4,7 +4,7 @@
 # Configurable Defaults
 # ------------------------
 
-DOCKER_IMAGE=${DOCKER_IMAGE:-deepcite-auth}
+DOCKER_IMAGE=${DOCKER_IMAGE:-auth}
 DOCKERFILE=${DOCKERFILE:-auth/Dockerfile}
 
 # ------------------------

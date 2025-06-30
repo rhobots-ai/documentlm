@@ -5,14 +5,14 @@ from config import settings
 
 class AuthService:
     def __init__(self):
-        self.base_url = f'{settings.DEEPCITE_AUTH_EP}/api'
+        self.base_url = f'{settings.DOCUMENTLM_AUTH_EP}/api'
         res = requests.post(
             f"${self.base_url}/auth/sign-in/email",
             headers={
                 "Content-Type": "application/json"
             },
             json={
-                "email": "tech@deepcite.in",
+                "email": "tech@rhobots.ai",
                 "password": "Q;-cPe/9Z804"
             }
         )
