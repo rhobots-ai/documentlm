@@ -10,17 +10,12 @@ from .routers import health, chat, documents
 
 # Function to create or get DocumentLM app instance
 async def create_documentlm_app():
-    """Initialize DocumentLM app instance."""
+    """Initialize deepcite app instance."""
     try:
         # Try to import and get the app instance - IMPORTANT
         from libs.ktem.ktem.main import App
-        try:
-            # First try to get instance
-            documentlm_app = App.get_instance()
-        except (AttributeError, Exception):
-            # If that fails, create a new instance
-            documentlm_app = App()
-    except ImportError:
+        documentlm_app = App()
+    except ImportError as e:
         # Fallback if App is not available
         from libs.ktem.ktem.app import BaseApp
         documentlm_app = BaseApp.get_instance()

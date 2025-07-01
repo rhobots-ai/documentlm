@@ -8,16 +8,6 @@ from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
-# Try to initialize kotaemon's file extractors
-try:
-    from kotaemon.indices.ingests.files import KH_DEFAULT_FILE_EXTRACTORS
-
-    DEFAULT_SUPPORTED_FILE_TYPES = list(KH_DEFAULT_FILE_EXTRACTORS.keys())
-except ImportError:
-    DEFAULT_SUPPORTED_FILE_TYPES = [".pdf", ".txt", ".md", ".html", ".docx"]
-    logger.warning(f"Could not import KH_DEFAULT_FILE_EXTRACTORS, using default file types: {DEFAULT_SUPPORTED_FILE_TYPES}")
-
-
 @dataclass
 class DocumentUploadRequest:
     """Data class for document upload request parameters"""

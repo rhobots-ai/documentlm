@@ -1,58 +1,25 @@
 # Add imports from __init__.py
 import asyncio
-import json
 import logging
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from sqlmodel import select, Session
-
-from libs.kotaemon.kotaemon.base import Document, RetrievedDocument
-# Import database models from ktem package
-from libs.ktem.ktem.db.engine import engine
-from libs.ktem.ktem.db.models import Conversation
-
-# Application imports
-try:
-    from libs.ktem.ktem.main import App
-except ImportError:
-    pass
-
 # Import BasePage for proper inheritance
 from libs.ktem.ktem.utils import get_file_names_regex, get_urls
 from libs.ktem.ktem.utils.commands import WEB_SEARCH_COMMAND
-
-# Kotaemon imports
 
 # Flow imports
 from theflow.settings import settings as flowsettings
 from theflow.utils.modules import import_dotted_string
 
-import gradio as gr  # Add this for gr.update()
-
 logger = logging.getLogger(__name__)
 
 # Other constants
-KH_DEMO_MODE = getattr(flowsettings, "KH_DEMO_MODE", False)
-KH_SSO_ENABLED = getattr(flowsettings, "KH_SSO_ENABLED", False)
-KH_WEB_SEARCH_BACKEND = getattr(flowsettings, "KH_WEB_SEARCH_BACKEND", None)
 DEFAULT_SETTING = "(default)"
-REASONING_LIMITS = 2 if KH_DEMO_MODE else 10
 INFO_PANEL_SCALES = {True: 8, False: 4}
-DEFAULT_QUESTION = (
-    "What is the summary of this document?"
-    if not KH_DEMO_MODE
-    else "What is the summary of this paper?"
-)
 
 WebSearch = None
-if KH_WEB_SEARCH_BACKEND:
-    try:
-        WebSearch = import_dotted_string(KH_WEB_SEARCH_BACKEND, safe=False)
-    except (ImportError, AttributeError) as e:
-        print(f"Error importing {KH_WEB_SEARCH_BACKEND}: {e}")
-
 
 @dataclass
 class ChatRequest:
@@ -64,7 +31,6 @@ class ChatRequest:
     conv_id: Optional[str]
     conv_name: Optional[str]
     first_selector_choices: List[List[str]]
-    is_conversation_flow: bool = False  # Flag to control conversation flow mode
 
 
 # Initialize reasonings dictionary manually
@@ -104,35 +70,38 @@ class ChatService:
         """Initialize the chat service with app instance"""
         self.first_indexing_url_fn = None  # This should be set based on your needs
         self.KH_DEMO_MODE = getattr(flowsettings, "KH_DEMO_MODE", False)
+        KH_WEB_SEARCH_BACKEND = getattr(flowsettings, "KH_WEB_SEARCH_BACKEND", None)
+        self._use_suggestion = getattr(flowsettings, "KH_FEATURE_CHAT_SUGGESTION", False)
+        self.msg_placeholder = getattr(flowsettings, "KH_CHAT_MSG_PLACEHOLDER", "Thinking ...")
+        self.empty_msg = getattr(flowsettings, "KH_CHAT_EMPTY_MSG_PLACEHOLDER", "(Sorry, I don't know)")
+
+        # self.KH_DEMO_MODE = False
+        # KH_WEB_SEARCH_BACKEND = None
+        # self._use_suggestion = False
+        # self.msg_placeholder = "Thinking ..."
+        # self.empty_msg = "(Sorry, I don't know)"
+
         self.DEFAULT_QUESTION = (
             "What is the summary of this document?"
             if not self.KH_DEMO_MODE
             else "What is the summary of this paper?"
         )
 
+        self.WebSearch = None
+        if KH_WEB_SEARCH_BACKEND:
+            try:
+                self.WebSearch = import_dotted_string(KH_WEB_SEARCH_BACKEND, safe=False)
+            except (ImportError, AttributeError) as e:
+                print(f"Error importing {KH_WEB_SEARCH_BACKEND}: {e}")
+
         # Store the app instance
         self._app = app
 
         # Initialize indices selectors
         self._indices_input = []
-        self._use_suggestion = getattr(flowsettings, "KH_FEATURE_CHAT_SUGGESTION", False)
 
         # Initialize reasonings
         self.reasonings = initialize_reasonings()
-
-    def new_conv(self, user_id: str) -> tuple[str, Any]:
-        """Create new conversation in database"""
-        if user_id is None:
-            logger.warning("Please sign in first")
-            return None, gr.update()
-
-        with Session(engine) as session:
-            new_conv = Conversation(user=user_id)
-            session.add(new_conv)
-            session.commit()
-            id_ = new_conv.id
-
-        return id_, gr.update()
 
     def submit_message(self, request_data: ChatRequest) -> Dict[str, Any]:
         """
@@ -206,15 +175,6 @@ class ChatService:
         if not chat_input_text and not request_data.chat_history:
             chat_input_text = self.DEFAULT_QUESTION
 
-        # Selector Output Preparation
-        if file_ids:
-            selector_output = [
-                "select",
-                GradioUpdate(value=file_ids, choices=request_data.first_selector_choices),
-            ]
-        else:
-            selector_output = [GradioUpdate(), GradioUpdate()]
-
         # Update chat history
         chat_history = request_data.chat_history
         if chat_input_text:
@@ -226,35 +186,7 @@ class ChatService:
         # Conversation Management
         new_conv_id = None
         new_conv_name = None
-        conv_update = gr.update()
-
-        # Check if we should use conversation flow (store in DB) or history-only mode
-        if request_data.is_conversation_flow:
-            if not request_data.conv_id:
-                if not self.KH_DEMO_MODE:
-                    id_, update = self.new_conv(request_data.user_id)
-                    if id_:
-                        with Session(engine) as session:
-                            statement = select(Conversation).where(Conversation.id == id_)
-                            name = session.exec(statement).one().name
-                            new_conv_id = id_
-                            conv_update = update
-                            new_conv_name = name
-                    else:
-                        new_conv_id, new_conv_name, conv_update = None, None, gr.update()
-                else:
-                    new_conv_id, new_conv_name, conv_update = None, None, gr.update()
-            else:
-                new_conv_id = request_data.conv_id
-                conv_update = gr.update()
-                new_conv_name = request_data.conv_name
-        else:
-            # History-only mode - don't create conversation records
-            if request_data.conv_id:
-                new_conv_id = request_data.conv_id
-                new_conv_name = request_data.conv_name
-            else:
-                print("\n[CONVERSATION] Using history-only mode without conversation IDs")
+        conv_update = None
 
         # Prepare response
         response = {
@@ -268,14 +200,6 @@ class ChatService:
                 'choices': request_data.first_selector_choices
             }
         }
-
-        # Include conversation fields
-        # In conversation flow mode: always include
-        # In history-only mode: only include if they exist
-        if request_data.is_conversation_flow or new_conv_id:
-            response['conv_id'] = new_conv_id
-            response['conv_name'] = new_conv_name
-            response['conv_update'] = conv_update
 
         print("\n" + "=" * 50)
         print("SUBMIT MESSAGE FUNCTION - COMPLETED")
@@ -342,10 +266,10 @@ class ChatService:
 
             if command_state == WEB_SEARCH_COMMAND:
                 # set retriever for web search
-                if not WebSearch:
+                if not self.WebSearch:
                     raise ValueError("Web search back-end is not available.")
 
-                web_search = WebSearch()
+                web_search = self.WebSearch()
                 retrievers.append(web_search)
             else:
                 for index in self._app.index_manager.indices:
@@ -419,11 +343,9 @@ class ChatService:
                 user_id,
                 *selecteds
             )
-            msg_placeholder = getattr(
-                flowsettings, "KH_CHAT_MSG_PLACEHOLDER", "Thinking ..."
-            )
+
             yield {
-                'chat_history': [(chat_input, text or msg_placeholder)],
+                'chat_history': [(chat_input, text or self.msg_placeholder)],
                 'evidences': evidences,
                 'plot': plot,
                 'chat_state': chat_state
@@ -499,7 +421,7 @@ class ChatService:
                     )
 
                     response_data = {
-                        'chat_history': [(chat_input, text or msg_placeholder)],
+                        'chat_history': [(chat_input, text or self.msg_placeholder)],
                         'channel': response.channel,
                         'evidences': evidences,
                         'plot': plot,
@@ -563,17 +485,14 @@ class ChatService:
 
         # Final yield outside the loop to ensure the last state is sent
         # Now uses potentially updated accumulated values from the StopIteration block
-        logger.info(f"[FINAL_YIELD_DEBUG] Preparing final_yield_data.")
+        logger.info("[FINAL_YIELD_DEBUG] Preparing final_yield_data.")
         logger.info(f"[FINAL_YIELD_DEBUG] Current accumulated_token_usage: {accumulated_token_usage}")
         logger.info(f"[FINAL_YIELD_DEBUG] Current accumulated_mindmap_json is set: {accumulated_mindmap_json is not None}")
 
         # Handle empty response specifically after the loop
         final_text_to_use = text
         if not text:
-            empty_msg = getattr(
-                flowsettings, "KH_CHAT_EMPTY_MSG_PLACEHOLDER", "(Sorry, I don't know)"
-            )
-            final_text_to_use = empty_msg
+            final_text_to_use = self.empty_msg
 
         final_yield_data = {
             'chat_history': chat_history + [(chat_input, final_text_to_use)],
@@ -584,24 +503,3 @@ class ChatService:
             'mindmap': accumulated_mindmap_json  # Use final accumulated value
         }
         yield {k: v for k, v in final_yield_data.items() if v is not None}
-
-    def process_chat_with_hooks(self, submit_response, chat_response, user_id):
-        """Process additional hooks after chat is complete"""
-        # Example: Check if conversation should be renamed
-        if self.should_rename_conversation(submit_response, chat_response):
-            new_name = self.suggest_conversation_name(chat_response['chat_history'])
-            if new_name:
-                self.rename_conversation(submit_response['conv_id'], new_name, user_id)
-
-        # Add other hooks as needed (similar to the Gradio implementation)
-
-        return chat_response
-
-
-# Replace Gradio-specific updates with Django-friendly alternatives
-# Create a helper class to mimic gr.update() functionality
-class GradioUpdate:
-    def __init__(self, value=None, visible=None, choices=None):
-        self.value = value
-        self.visible = visible
-        self.choices = choices
