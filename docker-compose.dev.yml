@@ -1,46 +1,47 @@
 services:
-#  core:
-#    build:
-#      dockerfile: ./core/Dockerfile
-#      context: .
-#    image: documentlm-core:latest
-#    depends_on: &documentlm-depends-on
-#      postgres:
-#        condition: service_healthy
-#    command: ["web"]
-#    ports:
-#      - "8000:8000"
-#    environment: &documentlm-core-env
-#      DEBUG:  ${DEBUG:-true}
-#      APP_ENV: ${APP_ENV:-DEV}
-#      SECRET_KEY: ${SECRET_KEY:-mysecretkey}
-#      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY:-mywebhooksecretkey}
-#      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*,}
-#      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:3000,}
-#      HOST_NAME: ${HOST_NAME:-http://localhost:8000}
-#      DB_HOST: ${DB_HOST:-postgres}
-#      DB_USER: ${DB_USER:-postgres}
-#      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-#      DB_NAME: ${DB_NAME:-core}
-#      RAZORPAY_KEY: ${RAZORPAY_KEY:-}
-#      RAZORPAY_SECRET: ${RAZORPAY_SECRET:-}
-#      RAZORPAY_WEBHOOK_SECRET_KEY: ${RAZORPAY_WEBHOOK_SECRET_KEY:-}
-#      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
-#      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
-#      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
-#      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
-#      AWS_REGION: ${AWS_REGION:-ap-south-1}
-#      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-django-db}
-#      CELERY_CACHE_BACKEND: ${CELERY_CACHE_BACKEND:-django-cache}
-#      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
-#      DOCUMENTLM_RAG_EP: ${DOCUMENTLM_RAG_EP:-http://rag:5001}
-#      DOCUMENTLM_AUTH_EP: ${DOCUMENTLM_AUTH_EP:-http://auth:10000}
-#    restart: always
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
+  core:
+    build:
+      dockerfile: ./core/Dockerfile.dev
+      context: .
+    image: documentlm-core:latest
+    volumes:
+      - ./core:/app
+    depends_on: &documentlm-depends-on
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment: &documentlm-core-env
+      DEBUG:  ${DEBUG:-true}
+      APP_ENV: ${APP_ENV:-DEV}
+      SECRET_KEY: ${SECRET_KEY:-mysecretkey}
+      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY:-mywebhooksecretkey}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*,}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:3000,}
+      HOST_NAME: ${HOST_NAME:-http://localhost:8000}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-core}
+      RAZORPAY_KEY: ${RAZORPAY_KEY:-}
+      RAZORPAY_SECRET: ${RAZORPAY_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET_KEY: ${RAZORPAY_WEBHOOK_SECRET_KEY:-}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-django-db}
+      CELERY_CACHE_BACKEND: ${CELERY_CACHE_BACKEND:-django-cache}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      DOCUMENTLM_RAG_EP: ${DOCUMENTLM_RAG_EP:-http://rag:5001}
+      DOCUMENTLM_AUTH_EP: ${DOCUMENTLM_AUTH_EP:-http://auth:10000}
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 #
 #  celery:
 #    image: documentlm-core:latest
@@ -79,11 +80,6 @@ services:
     ports:
       - "3000:3000"
     restart: always
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   auth:
     build:

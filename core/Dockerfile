@@ -23,7 +23,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential --fix-missing
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential --fix-missing && \
+    rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------
 # Build python dependencies
