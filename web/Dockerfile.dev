@@ -35,4 +35,4 @@ EXPOSE 3000
 WORKDIR /app/web
 
 #CMD ["tail", "-f", "/dev/null"]
-ENTRYPOINT ["dumb-init", "--", "sh", "./entrypoint-dev.sh"]
+CMD ["pnpm", "run", "dev"]
