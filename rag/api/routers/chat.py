@@ -53,8 +53,7 @@ async def chat_view(request: Request):
             settings=request_data.get('settings', DEFAULT_SETTINGS),
             conv_name=generated_conv_name or request_data.get('conv_name'),
             conv_id=request_data.get('conv_id'),
-            first_selector_choices=request_data.get('first_selector_choices', []),
-            is_conversation_flow=request_data.get('is_conversation_flow', False)
+            first_selector_choices=request_data.get('first_selector_choices', [])
         )
 
         # Submit the chat message
