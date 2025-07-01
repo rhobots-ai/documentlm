@@ -48,9 +48,6 @@ importers:
       '@aws-sdk/client-sesv2':
         specifier: ^3.826.0
         version: 3.835.0
-      '@better-auth/cli':
-        specifier: ^1.2.11
-        version: 1.2.11(@types/pg@8.15.4)(kysely@0.28.2)(magicast@0.3.5)(pg@8.16.2)
       axios:
         specifier: ^1.9.0
         version: 1.10.0
@@ -76,6 +73,9 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
     devDependencies:
+      '@better-auth/cli':
+        specifier: ^1.2.12
+        version: 1.2.12(@types/pg@8.15.4)(kysely@0.28.2)(magicast@0.3.5)(pg@8.16.2)
       '@types/express':
         specifier: ^5.0.2
         version: 5.0.3
@@ -96,6 +96,8 @@ importers:
         version: 5.8.3
 
   core: {}
+
+  rag: {}
 
   web:
     dependencies:
@@ -561,8 +563,8 @@ packages:
     resolution: {integrity: sha512-ETyHEk2VHHvl9b9jZP5IHPavHYk57EhanlRRuae9XCpb/j5bDCbPPMOBfCWhnl/7EDJz0jEMCi/RhccCE8r1+Q==}
     engines: {node: '>=6.9.0'}
 
-  '@better-auth/cli@1.2.11':
-    resolution: {integrity: sha512-v6HYS/tnTCF6msP59RB7cBQbd0wsYPk6EgTlwXNYbIEekOj8CDyJp6OszSAvG0W3om8dEu1IDnEnSHoIn+l4/g==}
+  '@better-auth/cli@1.2.12':
+    resolution: {integrity: sha512-Ue8lq5s76Y6KnGsfXsrhza7p3T/LlJrCeMC1K2lGxO3DEDCHVPMH5483WW37gRjrc0pxGIXw3BZTB0Xc52Pt6Q==}
     hasBin: true
 
   '@better-auth/utils@0.2.5':
@@ -2582,8 +2584,8 @@ packages:
   better-auth@1.2.10:
     resolution: {integrity: sha512-nEj1RG4DdLUuJiV5CR93ORyPCptGRBwksaPPCkUtGo9ka+UIlTpaiKoTaTqVLLYlqwX4bOj9tJ32oBNdf2G3Kg==}
 
-  better-auth@1.2.11:
-    resolution: {integrity: sha512-ZY987hD4vNLorWL/BFFdbHVsQVh7HnVODdyovespzII5jsTpeh/+rI8a3ZIUVca+oGjPtHwgfr0gmlRO5uy3qw==}
+  better-auth@1.2.12:
+    resolution: {integrity: sha512-YicCyjQ+lxb7YnnaCewrVOjj3nPVa0xcfrOJK7k5MLMX9Mt9UnJ8GYaVQNHOHLyVxl92qc3C758X1ihqAUzm4w==}
 
   better-call@1.0.9:
     resolution: {integrity: sha512-Qfm0gjk0XQz0oI7qvTK1hbqTsBY4xV2hsHAxF8LZfUYl3RaECCIifXuVqtPpZJWvlCCMlQSvkvhhyuApGUba6g==}
@@ -7783,7 +7785,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@better-auth/cli@1.2.11(@types/pg@8.15.4)(kysely@0.28.2)(magicast@0.3.5)(pg@8.16.2)':
+  '@better-auth/cli@1.2.12(@types/pg@8.15.4)(kysely@0.28.2)(magicast@0.3.5)(pg@8.16.2)':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/preset-react': 7.27.1(@babel/core@7.27.4)
@@ -7793,7 +7795,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@types/better-sqlite3': 7.6.13
       '@types/prompts': 2.4.9
-      better-auth: 1.2.11
+      better-auth: 1.2.12
       better-sqlite3: 11.10.0
       c12: 2.0.4(magicast@0.3.5)
       chalk: 5.4.1
@@ -10170,7 +10172,7 @@ snapshots:
       nanostores: 0.11.4
       zod: 3.25.62
 
-  better-auth@1.2.11:
+  better-auth@1.2.12:
     dependencies:
       '@better-auth/utils': 0.2.5
       '@better-fetch/fetch': 1.1.18

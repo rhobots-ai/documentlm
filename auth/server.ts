@@ -35,7 +35,7 @@ app.all("/api/auth/{*any}", (req, res, next) => {
 // Other middleware and routes
 app.use(express.json());
 
-app.get("/api/me", async (req, res) => {
+app.get("/api/me", async (req: any, res: any) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });

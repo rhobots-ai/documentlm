@@ -1,0 +1,23 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Add dependencies
+RUN apk update && apk upgrade --no-cache libc6-compat libcrypto3 libssl3
+
+RUN apk add --no-cache dumb-init curl
+
+# Install dependencies
+RUN corepack enable && corepack prepare pnpm@10.12.3 --activate
+
+# Copy full source for development
+COPY . .
+
+RUN pnpm install --filter auth --frozen-lockfile
+
+EXPOSE 10000
+
+WORKDIR /app/auth
+
+#CMD ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["dumb-init", "--", "sh", "./entrypoint.sh"]

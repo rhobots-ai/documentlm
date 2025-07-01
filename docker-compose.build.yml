@@ -97,6 +97,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    command: ["start"]
     ports:
       - "10000:10000"
     environment:
