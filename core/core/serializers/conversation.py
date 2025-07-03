@@ -1,9 +1,15 @@
 from rest_framework import serializers
+from config import settings
 
 from core.models import DataSource, Conversation, Message, ConversationNote, Space
 
 
 class ConversationDataSourceSerializer(serializers.ModelSerializer):
+    file = serializers.SerializerMethodField()
+
+    def get_file(self, obj):
+        return obj.file.url.replace(settings.AWS_S3_ENDPOINT_URL, settings.AWS_S3_PUBLIC_ENDPOINT_URL)
+
     class Meta:
         model = DataSource
         fields = ['id', 'title', 'file', 'status']

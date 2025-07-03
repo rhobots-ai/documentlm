@@ -1,0 +1,210 @@
+services:
+  core:
+    image: rhobotsai/documentlm-core:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["web"]
+    ports:
+      - "8000:8000"
+    environment: &documentlm-core-env
+      DEBUG:  ${DEBUG:-true}
+      APP_ENV: ${APP_ENV:-DEV}
+      SECRET_KEY: ${SECRET_KEY:-mysecretkey}
+      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY:-mywebhooksecretkey}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*,}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:3000,}
+      HOST_NAME: ${HOST_NAME:-http://localhost:8000}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-core}
+      RAZORPAY_KEY: ${RAZORPAY_KEY:-}
+      RAZORPAY_SECRET: ${RAZORPAY_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET_KEY: ${RAZORPAY_WEBHOOK_SECRET_KEY:-}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
+      AWS_S3_PUBLIC_ENDPOINT_URL: ${AWS_S3_PUBLIC_ENDPOINT_URL:-http://localhost:9090}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-django-db}
+      CELERY_CACHE_BACKEND: ${CELERY_CACHE_BACKEND:-django-cache}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      DOCUMENTLM_RAG_EP: ${DOCUMENTLM_RAG_EP:-http://rag:5001}
+      DOCUMENTLM_AUTH_EP: ${DOCUMENTLM_AUTH_EP:-http://auth:10000}
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  celery:
+    image: rhobotsai/documentlm-core:latest
+    command: ["celery"]
+    depends_on:
+      core:
+        condition: service_healthy
+    environment:
+      <<: *documentlm-core-env
+    restart: always
+
+  beat:
+    image: rhobotsai/documentlm-core:latest
+    command: ["beat"]
+    depends_on:
+      core:
+        condition: service_healthy
+    environment:
+      <<: *documentlm-core-env
+    restart: always
+
+  web:
+    image: rhobotsai/documentlm-web:latest
+    depends_on:
+      core:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+      rag:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  auth:
+    image: rhobotsai/documentlm-auth:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["start"]
+    ports:
+      - "10000:10000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PORT:-10000}
+      BASE_DOMAIN: ${BASE_DOMAIN:-localhost}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-myauthsecret}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:10000}
+      TRUSTED_ORIGINS: ${TRUSTED_ORIGINS:-http://localhost:3000,http://dps.localhost:3000}
+      DATABASE_STRING: ${DATABASE_STRING:-postgres://postgres:postgres@postgres:5432/auth}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      MICROSOFT_CLIENT_ID: ${MICROSOFT_CLIENT_ID:-}
+      MICROSOFT_CLIENT_SECRET: ${MICROSOFT_CLIENT_SECRET:-}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
+      AWS_SENDER_EMAIL: ${AWS_SENDER_EMAIL:-}
+      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY:-mywebhooksecretkey}
+      WEBHOOK_EP: ${WEBHOOK_EP:-http://core:8000/api/auth/webhook/}
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:10000/api/auth/ok" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  rag:
+    image: rhobotsai/documentlm-rag:latest
+    depends_on:
+      core:
+        condition: service_healthy
+    ports:
+      - "5001:5001"
+    volumes:
+      - rag_data:/app/ktem_app_data
+    environment:
+      OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+      OPENAI_EMBEDDINGS_MODEL: ${OPENAI_EMBEDDINGS_MODEL:-text-embedding-3-large}
+      COHERE_API_KEY: ${COHERE_API_KEY:-<COHERE_API_KEY>}
+      KH_DATABASE: ${KH_DATABASE:-postgresql://postgres:postgres@postgres:5432/core}
+      KH_DOCSTORE_NAME: ${KH_DOCSTORE_NAME:-local}
+      KH_DOCSTORE_LANCE_PATH: ${KH_DOCSTORE_LANCE_PATH:-}
+      KH_DOCSTORE_LANCE_API_KEY: ${KH_DOCSTORE_LANCE_API_KEY:-}
+      KH_VECTORSTORE_NAME: ${KH_VECTORSTORE_NAME:-local}
+      KH_VECTORSTORE_QDRANT_PATH: ${KH_VECTORSTORE_QDRANT_PATH:-}
+      KH_VECTORSTORE_QDRANT_API_KEY: ${KH_VECTORSTORE_QDRANT_API_KEY:-}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
+      TMPDIR: /app/ktem_app_data/tmp
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  minio:
+    image: minio/minio
+    entrypoint: sh
+    # create the 'documentlm' bucket before starting the service
+    command: -c 'mkdir -p /data/documentlm && minio server --address ":9000" --console-address ":9001" /data'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: miniosecret
+    ports:
+      - "9090:9000"
+      - "9091:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+      start_period: 1s
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-latest}
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+  rag_data:
+    driver: local
