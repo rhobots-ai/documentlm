@@ -288,12 +288,12 @@
     }
   }
 
-  onMounted(() => {
-    if (isLoggedIn) {
+  watch(() => isLoggedIn.value, (isLoggedInNewValue) => {
+    if (isLoggedInNewValue) {
       conversationsStore.fetchConversations(true)
       firstLoad.value = false
     }
-  })
+  }, {immediate: true})
 
   const handleWorkspaceNavigation = () => {
     if (isMobile.value) {
