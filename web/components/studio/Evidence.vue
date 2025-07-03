@@ -56,7 +56,7 @@
             >
               <img
                   :src="createFullS3URL(citation.thumbnail)"
-                  :alt="`Preview of page ${citation.page}`"
+                  :alt="`Preview of page ${citation.page_label}`"
                   class="h-40 w-40 object-cover rounded border border-gray-200 dark:border-gray-700 transition-transform group-hover/preview:scale-105"
               />
             </button>
