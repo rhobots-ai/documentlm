@@ -139,7 +139,7 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
       OPENAI_EMBEDDINGS_MODEL: ${OPENAI_CHAT_MODEL:-text-embedding-3-large}
-      COHERE_API_KEY: ${COHERE_API_KEY:-}
+      COHERE_API_KEY: ${COHERE_API_KEY:-cohereapikey}
       KH_DATABASE: ${KH_DATABASE:-postgresql://postgres:postgres@postgres:5432/core}
       KH_DOCSTORE_NAME: ${KH_DOCSTORE_NAME:-local}
       KH_DOCSTORE_LANCE_PATH: ${KH_DOCSTORE_LANCE_PATH:-}
