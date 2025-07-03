@@ -7,6 +7,12 @@ if [ "$1" = "web" ]; then
 
   echo "🚀 Starting Gunicorn..."
   exec gunicorn config.wsgi:application --bind 0.0.0.0:8000
+elif [ "$1" = "dev" ]; then
+    echo "🔄 Running Django migrations..."
+    python manage.py migrate --noinput
+
+    echo "🚀 Starting Gunicorn..."
+    exec python manage.py runserver 0.0.0.0:8000
 elif [ "$1" = "celery" ]; then
   echo "📦 Starting Celery worker..."
   exec celery -A config worker --loglevel=INFO

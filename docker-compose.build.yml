@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: ./core/Dockerfile
       context: .
-    image: documentlm-core:latest
+    image: rhobotsai/documentlm-core:latest
     depends_on: &documentlm-depends-on
       postgres:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
       retries: 3
 
   celery:
-    image: documentlm-core:latest
+    image: rhobotsai/documentlm-core:latest
     command: ["celery"]
     environment:
       <<: *documentlm-core-env
@@ -53,7 +53,7 @@ services:
     restart: always
 
   beat:
-    image: documentlm-core:latest
+    image: rhobotsai/documentlm-core:latest
     command: ["beat"]
     environment:
       <<: *documentlm-core-env
@@ -74,13 +74,7 @@ services:
         - NUXT_PUBLIC_API_BASE_URL=${NUXT_PUBLIC_API_BASE_URL:-localhost:8000}
         - NUXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NUXT_PUBLIC_GOOGLE_ANALYTICS_ID:-}
         - NUXT_PUBLIC_S3_URL=${NUXT_PUBLIC_S3_URL:-http://localhost:9090}
-    depends_on:
-      auth:
-        condition: service_healthy
-      core:
-        condition: service_healthy
-      rag:
-        condition: service_healthy
+    image: rhobotsai/documentlm-web:latest
     ports:
       - "3000:3000"
     restart: always
@@ -94,6 +88,7 @@ services:
     build:
       dockerfile: ./auth/Dockerfile
       context: .
+    image: rhobotsai/documentlm-auth:latest
     depends_on:
       postgres:
         condition: service_healthy
@@ -133,21 +128,20 @@ services:
     build:
       dockerfile: ./rag/Dockerfile
       context: .
+    image: rhobotsai/documentlm-rag:latest
     depends_on:
-      core:
+      postgres:
         condition: service_healthy
     ports:
       - "5001:5001"
     volumes:
       - rag_data:/app/ktem_app_data
-#    env_file:
-#      - ./.env.rag
     environment:
       OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
       OPENAI_EMBEDDINGS_MODEL: ${OPENAI_CHAT_MODEL:-text-embedding-3-large}
-      COHERE_API_KEY: ${COHERE_API_KEY:-}
+      COHERE_API_KEY: ${COHERE_API_KEY:-cohereapikey}
       KH_DATABASE: ${KH_DATABASE:-postgresql://postgres:postgres@postgres:5432/core}
       KH_DOCSTORE_NAME: ${KH_DOCSTORE_NAME:-local}
       KH_DOCSTORE_LANCE_PATH: ${KH_DOCSTORE_LANCE_PATH:-}

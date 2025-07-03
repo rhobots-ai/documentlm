@@ -1,0 +1,49 @@
+# -----------------------------------
+# Dev Image for RAG
+# -----------------------------------
+FROM python:3.10-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONIOENCODING=UTF-8
+
+RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom && \
+    echo "Acquire::http::No-Cache true;" >> /etc/apt/apt.conf.d/99custom && \
+    echo "Acquire::BrokenProxy    true;" >> /etc/apt/apt.conf.d/99custom
+
+RUN apt-get update -qqy && \
+    apt-get install -y --no-install-recommends \
+        ssh \
+        git \
+        unzip \
+        curl \
+        cargo \
+        gcc \
+        g++ \
+        poppler-utils \
+        libpoppler-dev \
+        dumb-init
+
+# Clean up
+RUN apt-get autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
+# Copy only requirements first for cache optimization
+COPY rag/requirements.txt /app/requirements.txt
+
+RUN pip install --upgrade pip
+RUN --mount=type=ssh  \
+    --mount=type=cache,target=/root/.cache/pip  \
+    pip install -e "libs/kotaemon" \
+    && pip install -e "libs/ktem" \
+    && pip install "pdfservices-sdk@git+https://github.com/niallcm/pdfservices-python-sdk.git@bump-and-unfreeze-requirements"
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Default command for development
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "5001", "--reload"]

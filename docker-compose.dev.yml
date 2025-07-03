@@ -6,6 +6,7 @@ services:
     image: documentlm-core:latest
     volumes:
       - ./core:/app
+    command: ["dev"]
     depends_on: &documentlm-depends-on
       postgres:
         condition: service_healthy
@@ -42,27 +43,27 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-#
-#  celery:
-#    image: documentlm-core:latest
-#    command: ["celery"]
-#    environment:
-#      <<: *documentlm-core-env
-#    depends_on:
-#      core:
-#        condition: service_healthy
-#    restart: always
-#
-#  beat:
-#    image: documentlm-core:latest
-#    command: ["beat"]
-#    environment:
-#      <<: *documentlm-core-env
-#    depends_on:
-#      core:
-#        condition: service_healthy
-#    restart: always
-#
+
+  celery:
+    image: documentlm-core:latest
+    command: ["celery"]
+    environment:
+      <<: *documentlm-core-env
+    depends_on:
+      core:
+        condition: service_healthy
+    restart: always
+
+  beat:
+    image: documentlm-core:latest
+    command: ["beat"]
+    environment:
+      <<: *documentlm-core-env
+    depends_on:
+      core:
+        condition: service_healthy
+    restart: always
+
   web:
     build:
       dockerfile: ./web/Dockerfile.dev
@@ -122,44 +123,42 @@ services:
       timeout: 10s
       retries: 3
 
-#  rag:
-#    build:
-#      dockerfile: ./rag/Dockerfile
-#      context: .
-#    depends_on:
-#      core:
-#        condition: service_healthy
-#    ports:
-#      - "5001:5001"
-#    volumes:
-#      - rag_data:/app/ktem_app_data
-#    #    env_file:
-#    #      - ./.env.rag
-#    environment:
-#      OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
-#      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-#      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
-#      OPENAI_EMBEDDINGS_MODEL: ${OPENAI_CHAT_MODEL:-text-embedding-3-large}
-#      COHERE_API_KEY: ${COHERE_API_KEY:-}
-#      KH_DATABASE: ${KH_DATABASE:-postgresql://postgres:postgres@postgres:5432/core}
-#      KH_DOCSTORE_NAME: ${KH_DOCSTORE_NAME:-local}
-#      KH_DOCSTORE_LANCE_PATH: ${KH_DOCSTORE_LANCE_PATH:-}
-#      KH_DOCSTORE_LANCE_API_KEY: ${KH_DOCSTORE_LANCE_API_KEY:-}
-#      KH_VECTORSTORE_NAME: ${KH_VECTORSTORE_NAME:-local}
-#      KH_VECTORSTORE_QDRANT_PATH: ${KH_VECTORSTORE_QDRANT_PATH:-}
-#      KH_VECTORSTORE_QDRANT_API_KEY: ${KH_VECTORSTORE_QDRANT_API_KEY:-}
-#      AWS_REGION: ${AWS_REGION:-ap-south-1}
-#      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
-#      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
-#      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
-#      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
-#      TMPDIR: /app/ktem_app_data/tmp
-#    restart: always
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "http://localhost:5001/health" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
+  rag:
+    build:
+      dockerfile: ./rag/Dockerfile
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./rag:/app
+    environment:
+      OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+      OPENAI_EMBEDDINGS_MODEL: ${OPENAI_CHAT_MODEL:-text-embedding-3-large}
+      COHERE_API_KEY: ${COHERE_API_KEY:-}
+      KH_DATABASE: ${KH_DATABASE:-postgresql://postgres:postgres@postgres:5432/core}
+      KH_DOCSTORE_NAME: ${KH_DOCSTORE_NAME:-local}
+      KH_DOCSTORE_LANCE_PATH: ${KH_DOCSTORE_LANCE_PATH:-}
+      KH_DOCSTORE_LANCE_API_KEY: ${KH_DOCSTORE_LANCE_API_KEY:-}
+      KH_VECTORSTORE_NAME: ${KH_VECTORSTORE_NAME:-local}
+      KH_VECTORSTORE_QDRANT_PATH: ${KH_VECTORSTORE_QDRANT_PATH:-}
+      KH_VECTORSTORE_QDRANT_API_KEY: ${KH_VECTORSTORE_QDRANT_API_KEY:-}
+      AWS_REGION: ${AWS_REGION:-ap-south-1}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://minio:9000}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:-documentlm}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minio}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-miniosecret}
+      TMPDIR: /app/ktem_app_data/tmp
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rag:5001/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   minio:
     image: minio/minio
@@ -215,5 +214,3 @@ volumes:
     driver: local
   minio_data:
     driver: local
-#  rag_data:
-#    driver: local

@@ -12,64 +12,14 @@
     "test": {
       "dependsOn": ["^test"]
     },
-    "web:dev": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^build"]
-    },
-    "web:build": {
-      "dependsOn": ["^build"],
-      "outputs": ["web/.output/**"]
-    },
-    "auth:dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "auth:build": {
-      "dependsOn": ["^build"],
-      "outputs": ["auth/dist/**"]
-    },
-    "rag:dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "rag:build": {
-      "dependsOn": ["^build"],
-      "outputs": []
-    },
-    "core:migrate": {
-      "cache": false,
-      "dependsOn": [],
-      "inputs": [
-        "core/manage.py",
-        "core/core/settings/**",
-        "core/**/migrations/**",
-        "core/**/models.py"
-      ]
-    },
-    "core:makemigrations": {
-      "cache": false,
-      "dependsOn": [],
-      "inputs": [
-        "core/manage.py",
-        "core/core/settings/**",
-        "core/**/models.py"
-      ]
-    },
-    "core:dev": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["core:migrate"]
-    },
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": [
-        "core:dev",
-        "web:dev",
-        "auth:dev",
-        "rag:dev"
-      ]
+      "dependsOn": ["db:generate"]
+    },
+    "db:generate": {
+      "cache": false,
+      "dependsOn": ["^db:generate"]
     },
     "build:all": {
       "dependsOn": [

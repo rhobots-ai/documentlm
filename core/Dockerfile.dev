@@ -36,9 +36,7 @@ RUN pip install --upgrade pip && \
 # Copy code
 COPY ./core /app
 
-# Use dumb-init to handle PID 1 properly
-ENTRYPOINT ["dumb-init", "--"]
-
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Use dumb-init to handle PID 1 properly
+ENTRYPOINT ["dumb-init", "--", "bash", "./entrypoint.sh"]
