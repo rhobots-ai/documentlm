@@ -56,7 +56,6 @@ class DataSource(TimeStampedUUIDModel):
 
         from core.tasks import index_data_source
         index_data_source.delay(str(self.id), str(self.created_by_id), '/api/data-sources/', False)
-        index_data_source(str(ds.id), str(ds.created_by_id), '/api/data-sources/', False)
 
 
     def update_status(self, new_status):
