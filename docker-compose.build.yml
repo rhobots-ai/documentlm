@@ -74,7 +74,7 @@ services:
         - NUXT_PUBLIC_API_SCHEME=${NUXT_PUBLIC_API_SCHEME:-http}
         - NUXT_PUBLIC_API_BASE_URL=${NUXT_PUBLIC_API_BASE_URL:-localhost:8000}
         - NUXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NUXT_PUBLIC_GOOGLE_ANALYTICS_ID:-}
-        - NUXT_PUBLIC_S3_URL=${NUXT_PUBLIC_S3_URL:-http://localhost:9090}
+        - NUXT_PUBLIC_S3_URL=${NUXT_PUBLIC_S3_URL:-http://localhost:9090/documentlm/}
     image: rhobotsai/documentlm-web:latest
     ports:
       - "3000:3000"
@@ -165,9 +165,7 @@ services:
 
   minio:
     image: minio/minio
-    entrypoint: sh
-    # create the 'documentlm' bucket before starting the service
-    command: -c 'mkdir -p /data/documentlm && minio server --address ":9000" --console-address ":9001" /data'
+    command: minio server --address ':9000' --console-address ':9001' /data
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: miniosecret
@@ -182,6 +180,18 @@ services:
       timeout: 5s
       retries: 5
       start_period: 1s
+
+  minio_init:
+    image: minio/minio
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        until (mc alias set myminio http://minio:9000 minio miniosecret 2>/dev/null) do echo '...' && sleep 1; done;
+        mc mb --ignore-existing myminio/documentlm;
+        mc anonymous set download myminio/documentlm;
+        exit 0;
+      "
 
   redis:
     image: redis:7

@@ -6,11 +6,11 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: ["web"]
+    command: [ "web" ]
     ports:
       - "8000:8000"
     environment: &documentlm-core-env
-      DEBUG:  ${DEBUG:-true}
+      DEBUG: ${DEBUG:-true}
       APP_ENV: ${APP_ENV:-DEV}
       SECRET_KEY: ${SECRET_KEY:-mysecretkey}
       WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY:-mywebhooksecretkey}
@@ -37,14 +37,14 @@ services:
       DOCUMENTLM_AUTH_EP: ${DOCUMENTLM_AUTH_EP:-http://auth:10000}
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health/" ]
       interval: 30s
       timeout: 10s
       retries: 3
 
   celery:
     image: rhobotsai/documentlm-core:latest
-    command: ["celery"]
+    command: [ "celery" ]
     depends_on:
       core:
         condition: service_healthy
@@ -54,7 +54,7 @@ services:
 
   beat:
     image: rhobotsai/documentlm-core:latest
-    command: ["beat"]
+    command: [ "beat" ]
     depends_on:
       core:
         condition: service_healthy
@@ -85,7 +85,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: ["start"]
+    command: [ "start" ]
     ports:
       - "10000:10000"
     environment:
@@ -154,9 +154,7 @@ services:
 
   minio:
     image: minio/minio
-    entrypoint: sh
-    # create the 'documentlm' bucket before starting the service
-    command: -c 'mkdir -p /data/documentlm && minio server --address ":9000" --console-address ":9001" /data'
+    command: minio server --address ':9000' --console-address ':9001' /data
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: miniosecret
@@ -166,11 +164,23 @@ services:
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: [ "CMD", "mc", "ready", "local" ]
       interval: 1s
       timeout: 5s
       retries: 5
       start_period: 1s
+
+  minio_init:
+    image: minio/minio
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        until (mc alias set myminio http://minio:9000 minio miniosecret 2>/dev/null) do echo '...' && sleep 1; done;
+        mc mb --ignore-existing myminio/documentlm;
+        mc anonymous set download myminio/documentlm;
+        exit 0;
+      "
 
   redis:
     image: redis:7
@@ -178,7 +188,7 @@ services:
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 3s
       timeout: 10s
       retries: 10
@@ -187,7 +197,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-latest}
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 3s
       timeout: 3s
       retries: 10
