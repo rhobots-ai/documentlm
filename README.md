@@ -64,6 +64,11 @@ Run DocumentLM on your own machine in 5 minutes using Docker Compose.
   # Run the DocumentLM docker compose
   docker compose up
   ```
+To create a user, you can sign up via email or you can run the below script.
+
+ ```bash
+ ./scripts/init-db-user.sh
+ ```
 
 ## ⭐️ Star Us
 
