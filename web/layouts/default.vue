@@ -74,7 +74,7 @@ const {whiteLabeledOrganization, isWhiteLabeled} = storeToRefs(organizationStore
 const isMobile = computed(() => width.value < 1024)
 
 // const isSidebarOpen = ref(!isMobile.value && !isStudioPage.value)
-const isSidebarOpen = ref(!isMobile.value)
+const isSidebarOpen = ref(false)
 const isDark = ref(false)
 const sideBarRef = ref<HTMLElement | null>(null)
 
@@ -93,7 +93,7 @@ onMounted(() => {
 watch(isMobile, (newValue) => {
   // isSidebarOpen.value = !newValue && !isStudioPage.value;
   isSidebarOpen.value = !newValue;
-})
+}, {immediate: true})
 
 onClickOutside(sideBarRef, () => {
   if (isSidebarOpen.value && isMobile.value) {
