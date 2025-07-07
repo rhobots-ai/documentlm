@@ -7,6 +7,7 @@ interface AppConfig {
   TRUSTED_ORIGINS: string[];
   DATABASE_STRING: string;
 
+  REQUIRE_EMAIL_VERIFICATION: boolean;
   GOOGLE_CLIENT_ID: string;
   GOOGLE_CLIENT_SECRET: string;
   GITHUB_CLIENT_ID: string;
@@ -33,6 +34,7 @@ const getConfig = (): AppConfig => {
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || 'http://localhost:10000',
     TRUSTED_ORIGINS: process.env.TRUSTED_ORIGINS?.split(',') || ['http://localhost:3000'],
     DATABASE_STRING: process.env.DATABASE_STRING || '',
+    REQUIRE_EMAIL_VERIFICATION: process.env.REQUIRE_EMAIL_VERIFICATION === 'true',
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID || '',

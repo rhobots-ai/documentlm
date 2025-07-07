@@ -96,6 +96,7 @@ services:
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:10000}
       TRUSTED_ORIGINS: ${TRUSTED_ORIGINS:-http://localhost:3000,http://dps.localhost:3000}
       DATABASE_STRING: ${DATABASE_STRING:-postgres://postgres:postgres@postgres:5432/auth}
+      REQUIRE_EMAIL_VERIFICATION: ${REQUIRE_EMAIL_VERIFICATION:-false}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
@@ -174,6 +175,7 @@ services:
     image: minio/minio
     depends_on:
       - minio
+    restart: "no"
     entrypoint: >
       /bin/sh -c "
         until (mc alias set myminio http://minio:9000 minio miniosecret 2>/dev/null) do echo '...' && sleep 1; done;
@@ -210,6 +212,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d
+      - ./postgres/scripts:/scripts
 
 volumes:
   postgres_data:

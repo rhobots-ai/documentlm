@@ -60,7 +60,7 @@ export const useUserStore = defineStore('user', () => {
     const userProfile = {
       id: user.id,
       firstName: nameSplit[0],
-      lastName: nameSplit[nameSplit.length - 1],
+      lastName: nameSplit.length > 1 ? nameSplit[nameSplit.length - 1] : null,
       email: user.email || '',
       imageUrl: user.image,
       organizations: user.organizations

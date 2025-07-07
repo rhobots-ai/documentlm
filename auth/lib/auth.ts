@@ -60,7 +60,7 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: config.REQUIRE_EMAIL_VERIFICATION,
     sendResetPassword: async ({user, url, token}, request) => {
       try {
         const body = await renderEmailTemplate('reset_password', {
@@ -120,7 +120,7 @@ export const auth = betterAuth({
             'data': {
               id: user.id,
               first_name: nameSplit[0],
-              last_name: nameSplit[nameSplit.length - 1],
+              last_name: nameSplit.length > 1 ? nameSplit[nameSplit.length - 1] : null,
               email: user.email,
               image: user.image,
             }
