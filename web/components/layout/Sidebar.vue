@@ -102,7 +102,7 @@
                   :key="conversation.id"
                   :to="`/c/${conversation.id}`"
                   class="group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                  :class="{'bg-gray-200 dark:bg-gray-800': conversationsStore.currentConversation?.id == conversation.id}"
+                  :class="{'bg-gray-200 dark:bg-gray-700': conversationsStore.currentConversation?.id == conversation.id}"
                   @click="handleClose"
                   @click.right.prevent="openMenu($event, conversation)"
               >

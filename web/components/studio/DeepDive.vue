@@ -33,7 +33,7 @@
 
     <!-- Document Analysis Card -->
     <div
-        class="bg-white dark:bg-gray-900 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm max-h-[calc(100vh-11rem)] min-h-[calc(100vh-11rem)]">
+        class="bg-white dark:bg-gray-900 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm h-full">
       <div class="flex border-b border-gray-200/60 dark:border-gray-700/60">
         <button
             class="px-4 py-2 text-sm font-medium transition-colors"
@@ -67,7 +67,7 @@
             </span>
         </button>
       </div>
-      <div class="p-2 h-[calc(100vh-14rem)] overflow-y-auto">
+      <div class="p-2 h-[calc(100vh-10rem)] overflow-y-auto">
         <StudioMindMap4 v-if="activeTab === 'mindmap' && message?.mindmap" :data="message.mindmap"/>
         <StudioEvidence v-else-if="activeTab === 'text'" :citations="message?.citation" :data-sources="dataSources"/>
         <div v-else-if="activeTab === 'notes'" class="h-full">

@@ -373,6 +373,8 @@ import type {Conversation} from "~/types/conversation"
 import type {Message, ReasoningType} from "~/types/message"
 import {useConversationsStore} from '~/stores/conversations';
 import {useSubscriptionsStore} from '~/stores/subscriptions';
+import type {DataSource} from "~/types/data_source";
+import {useDataSourcesStore} from "~/stores/data_sources";
 
 const subscriptionsStore = useSubscriptionsStore()
 const conversationsStore = useConversationsStore()
@@ -409,6 +411,7 @@ const showSettingsDialog = ref(false)
 
 const pollingIntervals = ref<Record<string, NodeJS.Timeout>>({})
 const loadingDataSources = ref<Record<string, boolean>>({})
+const dataSourcesStore = useDataSourcesStore()
 
 const selectionPopup = ref<HTMLDivElement | null>(null)
 const isPopupVisible = ref(false)
@@ -511,29 +514,6 @@ const handleAddNoteClose = () => {
   showAddNoteSheet.value = false
   selectedText.value = ''
 }
-
-onMounted(async () => {
-  document.addEventListener('mouseup', handleMouseUp)
-  document.addEventListener('mousedown', handleMouseDown)
-
-  scrollToBottom()
-
-  await subscriptionsStore.getTokenUsage()
-
-  if (initialMessage.value) {
-    const message = initialMessage.value
-    conversationsStore.initialMessage = null
-    newMessage.value = message
-    await sendMessage()
-  }
-})
-
-onUnmounted(() => {
-  document.removeEventListener('mouseup', handleMouseUp)
-  document.removeEventListener('mousedown', handleMouseDown)
-
-  Object.values(pollingIntervals.value).forEach(interval => clearInterval(interval))
-})
 
 const handleAddDataSource = () => {
   showSourcesDialog.value = false
@@ -683,4 +663,63 @@ const sendMessage = async () => {
     reader?.cancel()
   }
 }
+
+const startPollingDataSource = async (source: DataSource) => {
+  if (source.status === 'indexed' || source.status === 'errored') return
+
+  loadingDataSources.value[source.id] = true
+
+  pollingIntervals.value[source.id] = setInterval(async () => {
+    try {
+      const {data} = await dataSourcesStore.getDataSource(source.id)
+      if (data) {
+        // Update source status in conversation
+        const sourceIndex = props.conversation.data_sources.findIndex(s => s.id === source.id)
+        if (sourceIndex !== -1) {
+          props.conversation.data_sources[sourceIndex] = data
+        }
+
+        // Stop polling if final status reached
+        if (data.status === 'indexed' || data.status === 'errored') {
+          clearInterval(pollingIntervals.value[source.id])
+          delete pollingIntervals.value[source.id]
+          loadingDataSources.value[source.id] = false
+        }
+      }
+    } catch (error) {
+      console.error('Error polling data source:', error)
+    }
+  }, 5000) // Poll every 5 seconds
+}
+
+watch(() => props.conversation.data_sources, (_) => {
+  if (props.conversation.data_sources) {
+    props.conversation.data_sources.filter(ds => ds.status != 'indexed' && ds.status != 'errored').forEach(source => {
+      startPollingDataSource(source)
+    })
+  }
+}, {immediate: true})
+
+onMounted(async () => {
+  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener('mousedown', handleMouseDown)
+
+  scrollToBottom()
+
+  await subscriptionsStore.getTokenUsage()
+
+  if (initialMessage.value) {
+    const message = initialMessage.value
+    conversationsStore.initialMessage = null
+    newMessage.value = message
+    await sendMessage()
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('mousedown', handleMouseDown)
+
+  Object.values(pollingIntervals.value).forEach(interval => clearInterval(interval))
+})
 </script>
