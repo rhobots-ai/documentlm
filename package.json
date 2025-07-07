@@ -9,16 +9,14 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "infra:dev:up": "docker compose -f ./docker-compose.dev.yml up -d --wait",
+    "infra:up": "docker compose up",
+    "infra:dev:up": "docker compose -f ./docker-compose.dev.yml up",
     "infra:dev:down": "docker compose -f ./docker-compose.dev.yml down",
     "infra:dev:prune": "docker compose -f ./docker-compose.dev.yml down -v",
-    "db:reset": "docker compose exec postgres psql -U postgres -c 'DROP DATABASE core; CREATE DATABASE core; DROP DATABASE auth; CREATE DATABASE auth;'\n",
+    "db:reset": "docker compose -f ./docker-compose.dev.yml up -d postgres && docker compose exec postgres bash -c \"/scripts/reset-databases.sh\"",
     "nuke": "bash ./scripts/nuke.sh",
-    "dx": "pnpm i && pnpm run infra:dev:prune && pnpm run infra:dev:up --pull always && pnpm run dev",
-    "dx:skip-infra": "pnpm i && pnpm run db:reset && pnpm run infra:dev:up --pull always && pnpm run dev",
-    "build": "turbo run build",
-    "start": "turbo run start",
-    "dev": "turbo run dev",
+    "init": "bash ./scripts/init-db-user.sh",
+    "dev": "pnpm i && pnpm run infra:dev:up --pull always",
     "prepare": "husky"
   },
   "devDependencies": {
