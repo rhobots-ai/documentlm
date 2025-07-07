@@ -1,5 +1,5 @@
 export const createFullS3URL = (url: string) => {
-  if (url.includes('deepcite.s3.ap-south-1.amazonaws.com')) return url
+  if (url.includes('s3.ap-south-1.amazonaws.com')) return url
   const config = useRuntimeConfig()
 
   return `${config.public.s3Url}${url}`;

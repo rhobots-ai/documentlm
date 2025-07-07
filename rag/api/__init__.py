@@ -10,7 +10,7 @@ from .routers import health, chat, documents
 
 # Function to create or get DocumentLM app instance
 async def create_documentlm_app():
-    """Initialize deepcite app instance."""
+    """Initialize documentlm app instance."""
     try:
         # Try to import and get the app instance - IMPORTANT
         from libs.ktem.ktem.main import App

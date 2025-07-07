@@ -88,7 +88,6 @@ KH_USER_CAN_SEE_PUBLIC = None
 KH_ENABLE_ALEMBIC = False
 # KH_DATABASE = f"sqlite:///{KH_USER_DATA_DIR / 'sql.db'}"
 KH_DATABASE = str(config("KH_DATABASE"))
-# KH_DATABASE = "postgresql://postgres:78Ut}5^]F$N!@deepcite.cqlpm3rbqcau.ap-south-1.rds.amazonaws.com/deepcite"
 KH_FILESTORAGE_PATH = str(KH_USER_DATA_DIR / "files")
 KH_WEB_SEARCH_BACKEND = (
     "kotaemon.indices.retrievers.tavily_web_search.WebSearch"

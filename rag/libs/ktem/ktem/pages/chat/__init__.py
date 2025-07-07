@@ -227,8 +227,8 @@ class ChatPage(BasePage):
                 with gr.Row(elem_id="main-logo-container"):
                     gr.HTML(f'''
                         <div class="app-header">
-                            <img src="https://ajjmbpivejpbonkgaagb.supabase.co/storage/v1/object/public/deepcite-cdn//logo.svg" alt="DeepCite Logo" class="main-logo main-logo-light" />
-                            <img src="https://ajjmbpivejpbonkgaagb.supabase.co/storage/v1/object/public/deepcite-cdn//logo-dark.svg" alt="DeepCite Logo" class="main-logo main-logo-dark" />
+                            <img src="https://ajjmbpivejpbonkgaagb.supabase.co/storage/v1/object/public/deepcite-cdn//logo.svg" alt="DocumentLM Logo" class="main-logo main-logo-light" />
+                            <img src="https://ajjmbpivejpbonkgaagb.supabase.co/storage/v1/object/public/deepcite-cdn//logo-dark.svg" alt="DocumentLM Logo" class="main-logo main-logo-dark" />
                         </div>
                     ''')
 
