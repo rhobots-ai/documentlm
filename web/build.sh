@@ -4,7 +4,7 @@
 # Configurable Defaults
 # ------------------------
 
-DOCKER_IMAGE=${DOCKER_IMAGE:-documentlm-web}
+DOCKER_IMAGE=${DOCKER_IMAGE:-rhobotsai/documentlm-web:latest}
 DOCKERFILE=${DOCKERFILE:-web/Dockerfile}
 
 NUXT_PUBLIC_AUTH_BASE_URL=${NUXT_PUBLIC_AUTH_BASE_URL:-http://localhost:10000}
