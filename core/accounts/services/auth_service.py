@@ -13,10 +13,10 @@ class AuthService:
             },
             json={
                 "email": "tech@rhobots.ai",
-                "password": "Q;-cPe/9Z804"
+                "password": ""
             }
         )
-        self.token = res.json()['token']
+        self.token = None
 
     def create_organization(self, name: str, slug: str, created_by: str, private_metadata=None, max_allowed_memberships=1):
         res = requests.post(
