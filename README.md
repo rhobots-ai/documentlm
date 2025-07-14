@@ -24,10 +24,6 @@
    <a href="https://github.com/rhobots-ai/documentlm/blob/main/LICENSE">
    <img src="https://img.shields.io/badge/License-MIT-E11311.svg" alt="MIT License">
    </a>
-   <br/>
-   <a href="https://discord.com/invite/7NXusRtqYU" target="_blank">
-   <img src="https://img.shields.io/discord/1111061815649124414?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb"
-      alt="chat on Discord"></a>
 </p>
 
 DocumentLM is an **open source AI Research** platform.
