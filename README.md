@@ -13,9 +13,9 @@
       </h3>
    </div>
 
-   <span>DocumentLM uses <a href="https://github.com/orgs/rhobots-ai/discussions"><strong>Github Discussions</strong></a>  for Support and Feature Requests.</span>
-   <br/>
-   <br/>
+<span>DocumentLM uses <a href="https://github.com/orgs/rhobots-ai/discussions"><strong>Github Discussions</strong></a>  for Support and Feature Requests.</span>
+<br/>
+<br/>
    <div>
    </div>
 </div>
@@ -23,6 +23,11 @@
 <p align="center">
    <a href="https://github.com/rhobots-ai/documentlm/blob/main/LICENSE">
    <img src="https://img.shields.io/badge/License-MIT-E11311.svg" alt="MIT License">
+   </a>
+   <br/>
+   <a href="https://discord.com/invite/7ujQyJce" target="_blank">
+      <img src="https://img.shields.io/discord/1356248488249131120?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb"
+      alt="chat on Discord">
    </a>
 </p>
 
@@ -60,6 +65,7 @@ Run DocumentLM on your own machine in 5 minutes using Docker Compose.
   # Run the DocumentLM docker compose
   docker compose up
   ```
+
 To create a user, you can sign up via email or you can run the below script.
 
  ```bash
