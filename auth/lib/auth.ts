@@ -6,43 +6,12 @@ import {callWebhook} from "./webhook.ts";
 import {renderEmailTemplate, sendEmail} from "./emailSender.ts";
 import {v4 as uuidv4} from 'uuid';
 import config from '../config.ts';
-import {createAuthMiddleware} from "better-auth/api";
 import psl from 'psl';
 
 function getTopLevelDomain(hostname: string): string {
   const parsed: any = psl.parse(hostname);
   return parsed.domain || hostname;
 }
-
-function updateCookieDomain(cookie: string, newDomain: string) {
-  return cookie
-    .replace(
-      /Domain=\.[a-zA-Z0-9.-]+/g,
-      `Domain=.${newDomain}` // Ensures new domain starts with a dot
-    )
-}
-
-const hook = createAuthMiddleware(async (ctx) => {
-  if (ctx.path === '/callback/:id' || ctx.path === 'get-session') {
-    const origin = ctx.context.responseHeaders?.get('location')
-    if (!origin) {
-      return
-    }
-    const url = new URL(origin);
-    const cookieDomain = getTopLevelDomain(url.hostname)
-    if (ctx.context.responseHeaders?.get('set-cookie')) {
-      let cookie = ctx.context.responseHeaders?.get('Set-Cookie');
-
-      if (!cookie) return
-
-      // Modify domain for each cookie
-      const updatedCookie = updateCookieDomain(cookie, cookieDomain);
-
-      ctx.context.responseHeaders?.set('Set-Cookie', updatedCookie);
-    }
-  }
-  // return ctx.json()
-});
 
 export const auth = betterAuth({
   trustedOrigins: config.TRUSTED_ORIGINS,
@@ -169,7 +138,7 @@ export const auth = betterAuth({
       membershipLimit: 1,
       invitationLimit: 10000,
       organizationCreation: {
-        afterCreate: async ({ organization, member, user }, request) => {
+        afterCreate: async ({organization, member, user}, request) => {
           await callWebhook({
             type: 'organization.created',
             'data': {
