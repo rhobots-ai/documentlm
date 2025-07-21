@@ -6,12 +6,6 @@ import {callWebhook} from "./webhook.ts";
 import {renderEmailTemplate, sendEmail} from "./emailSender.ts";
 import {v4 as uuidv4} from 'uuid';
 import config from '../config.ts';
-import psl from 'psl';
-
-function getTopLevelDomain(hostname: string): string {
-  const parsed: any = psl.parse(hostname);
-  return parsed.domain || hostname;
-}
 
 export const auth = betterAuth({
   trustedOrigins: config.TRUSTED_ORIGINS,
