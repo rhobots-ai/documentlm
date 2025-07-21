@@ -1,11 +1,11 @@
 import {betterAuth} from "better-auth";
 import {Pool} from "pg";
-import {admin, anonymous, bearer, haveIBeenPwned, jwt, openAPI, organization} from "better-auth/plugins"
 import {uploadImageToS3} from "./uploadToS3.ts";
 import {callWebhook} from "./webhook.ts";
 import {renderEmailTemplate, sendEmail} from "./emailSender.ts";
 import {v4 as uuidv4} from 'uuid';
 import config from '../config.ts';
+import {getEnabledPlugins} from "./ee";
 
 export const auth = betterAuth({
   trustedOrigins: config.TRUSTED_ORIGINS,
@@ -121,35 +121,5 @@ export const auth = betterAuth({
       sameSite: "none"
     }
   },
-  plugins: [
-    anonymous(),
-    haveIBeenPwned({
-      customPasswordCompromisedMessage: 'Password has been found in an online data breach. For account safety, please use a different password.'
-    }),
-    admin(),
-    organization({
-      organizationLimit: 1,
-      membershipLimit: 1,
-      invitationLimit: 10000,
-      organizationCreation: {
-        afterCreate: async ({organization, member, user}, request) => {
-          await callWebhook({
-            type: 'organization.created',
-            'data': {
-              id: organization.id,
-              name: organization.name,
-              slug: organization.slug,
-              metadata: organization.metadata,
-              created_by_id: user.id
-            }
-          })
-        }
-      }
-    }),
-    openAPI(),
-    jwt(),
-    bearer({
-      requireSignature: true
-    })
-  ]
+  plugins: getEnabledPlugins()
 });
